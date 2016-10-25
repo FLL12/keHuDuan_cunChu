@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>pic storage demo</title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			var src = "img/1.png";
+			function set (key) {
+				var img = document.createElement("img");
+				img.addEventListener('load',function () {//图片加载的时候触发回调函数
+					var imgCanvas = document.createElement('canvas');
+					imgContext = imgCanvas.getContext('2d');
+					
+					imgCanvas.width = this.width;
+					imgCanvas.height = this.height;
+				
+					imgContext.drawImage(this,0,0,this.width,this.height);
+					
+					var imgAsDataURL = imgCanvas.toDataURL('img/1.png');
+					console.log(imgAsDataURL);
+				
+					try {
+						localStorage.setItem(key, imgAsDataURL);
+					} catch (e) {
+						console.log('storage failed:' + e);
+					}
+				},false);
+				img.src = src;
+			}
+			function get(key) {
+				var srcStr = localStorage.getItem(key);
+				var imgObj = document.createElement('img');
+				imgObj.src = srcStr;
+				document.body.appendChild(imgObj);
+			}
+		</script>
+	</body>
+</html>
